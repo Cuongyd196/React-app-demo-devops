@@ -26,7 +26,7 @@ pipeline {
                 echo 'Deploying....'
                 sh 'docker container stop react-app-demo-devops || echo "this container does not exist" '
                 sh 'docker network create react-app-net || echo "this network exists"'
-                sh 'docker container run -d --rm --name react-app-demo-devops -p 3333:3000 --network react-app-net cuongyd196/react-app-demo-devops'
+                sh 'docker container run -d --rm --name react-app-demo-devops -p 3333:80 --network react-app-net cuongyd196/react-app-demo-devops'
             }
         }
     }
