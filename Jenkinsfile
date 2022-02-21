@@ -38,6 +38,7 @@ pipeline {
                 sh 'newvariable=${params.NAME}'
                 sh 'echo $newvariable'
             }
+          }
 
         stage('Build') {
             steps {
