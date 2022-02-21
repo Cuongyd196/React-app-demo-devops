@@ -22,6 +22,11 @@ pipeline {
     stages {
 
         stage('Initialize...') {
+            agent {
+                docker {
+                    image 'node:14-alpine3.10'
+                }
+            }
             steps {
                 echo "Hello ${params.PERSON}"
 
@@ -35,6 +40,7 @@ pipeline {
                 echo "Myname is : ${params.MYNAME}"
                 sh 'whoami'
                 sh 'pwd'
+                sh 'node -v'
 
             }
           }
