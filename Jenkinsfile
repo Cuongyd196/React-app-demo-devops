@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
             string(name: 'ImageName', defaultValue: 'cuongyd196/react-app-demo-devops', description: 'This is my image ! ')
-            text(name: 'ImageTag', defaultValue: 'latest', description: '')
+            string(name: 'ImageTag', defaultValue: 'latest', description: '')
         }
 
     environment {
@@ -27,7 +27,7 @@ pipeline {
 
         stage('Run and Build') {
             steps {
-                echo 'Building  image - ImageName: ${params.ImageName - ImageTag: ${params.ImageTag'
+                echo 'Building  image - ImageName: ${params.ImageName} - ImageTag: ${params.ImageTag}'
                 echo "ImageName: ${params.ImageName}"
                 sh 'docker build -t cuongyd196/react-app-demo-devops .'
             }
