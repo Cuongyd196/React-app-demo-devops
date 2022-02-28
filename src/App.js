@@ -6,6 +6,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <h2> Branch MASTER</h2>
         <p>
           ReactJs App DEMO - Nginx - Dockerfile - docker-compose
         </p>
