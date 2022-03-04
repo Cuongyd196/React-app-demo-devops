@@ -2,72 +2,64 @@ pipeline {
     agent any
 
     parameters {
-            string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-
-            text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-
-            booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
-
-            choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-
-            password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-
-            string(name: 'MYNAME', defaultValue: 'BI', description: 'my name is BI')
+            string(name: 'ImageName', defaultValue: 'cuongyd196/react-app-demo-devops', description: 'This is my image ! ')
+            string(name: 'ImageTag', defaultValue: 'latest', description: '')
         }
 
     environment {
         DOCKERHUB_CREDENTIALS=credentials('DockerHub')
-        NAME = 'CUONG'
+        NAME = 'CUONG NGUYEN'
+        GITHUB = 'cuongyd196'
     }
     stages {
 
-        stage('Initialize...') {
-            agent {
-                docker {
-                    image 'node:14-alpine3.10'
-                }
-            }
+        stage('Validate') {
             steps {
-                echo "Hello ${params.PERSON}"
+                echo "Hello ${NAME}"
 
-                echo "Biography: ${params.BIOGRAPHY}"
+                echo "GITHUB: ${GITHUB}"
 
-                echo "Toggle: ${params.TOGGLE}"
+                echo "ImageName: ${params.ImageName}"
 
-                echo "Choice: ${params.CHOICE}"
-
-                echo "Password: ${params.PASSWORD}"
-                echo "Myname is : ${params.MYNAME}"
-                sh 'whoami'
-                sh 'pwd'
-                sh 'node -v'
-
+                echo "ImageTag: ${params.ImageTag}"
             }
           }
 
-        stage('Build') {
+        stage('Run and Build') {
+            agent {
+                node {
+                    label 'aws_ec2'
+                }
+            }
             steps {
-                echo "NAME: $NAME"
-                echo 'Building  image..'
-                sh 'docker build -t cuongyd196/react-app-demo-devops .'
-
+                echo 'Run and Build aws_ec2'
+                echo 'Building  image - ImageName: ${params.ImageName} - ImageTag: ${params.ImageTag}'
+                echo "ImageName: ${params.ImageName}"
+                echo "${params.ImageName}:${params.ImageTag}"
+                sh "docker build -t ${params.ImageName}:${params.ImageTag} ."
             }
         }
-        stage('Pushing image') {
+
+        stage('Package and Push') {
+            agent {
+                node {
+                    label 'aws_ec2'
+                }
+            }
             steps {
                 echo 'Start pushing.. with credential'
                 sh 'echo $DOCKERHUB_CREDENTIALS'
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push cuongyd196/react-app-demo-devops'
-
+                sh "docker push ${params.ImageName}:${params.ImageTag}"
             }
         }
-        stage('Deploying') {
+
+        stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'docker container stop react-app-demo-devops-dev || echo "this container does not exist" '
+                sh 'docker container stop react-app-demo-devops || echo "this container does not exist" '
                 sh 'docker network create react-app-net || echo "this network exists"'
-                sh 'docker container run -d --rm --name react-app-demo-devops-dev -p 3334:80 --network react-app-net cuongyd196/react-app-demo-devops'
+                sh "docker container run -d --rm --name react-app-demo-devops -p 3333:80 --network react-app-net ${params.ImageName}:${params.ImageTag}"
                 telegramSend('Deploying - $PROJECT_NAME – # $BUILD_NUMBER – STATUS: $BUILD_STATUS!')
 
             }
