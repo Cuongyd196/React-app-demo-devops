@@ -49,7 +49,7 @@ pipeline {
             steps {
                 echo 'Start pushing.. with credential'
                 sh 'echo $DOCKERHUB_CREDENTIALS'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 sh "sudo docker push ${params.ImageName}:${params.ImageTag}"
             }
         }
