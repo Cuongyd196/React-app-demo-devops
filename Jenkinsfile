@@ -27,7 +27,7 @@ pipeline {
 
         stage('Run and Build') {
             steps {
-                echo 'Building  image - ImageName: ${params.ImageName} - ImageTag: ${params.ImageTag}'
+                echo "Building  image - ImageName: ${params.ImageName} - ImageTag: ${params.ImageTag}"
                 echo "ImageName: ${params.ImageName}"
                 echo "${params.ImageName}:${params.ImageTag}"
                 sh "docker build -t ${params.ImageName}:${params.ImageTag} ."
