@@ -1,0 +1,13 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Ansible') {
+            steps {
+                echo 'init'
+                ansiblePlaybook credentialsId: 'id_rsa', inventory: 'hosts', playbook: 'ansiblebook.yml'
+            }
+        }
+    }
+}

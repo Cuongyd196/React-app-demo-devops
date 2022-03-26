@@ -1,0 +1,7 @@
+- name : test
+  hosts: vmware
+  tasks:
+    - name: new task
+      shell: touch /home/devops/btest.txt
+    - name: create a directory
+      shell: mkdir /home/devops/newdirectory1
