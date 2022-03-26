@@ -2,6 +2,6 @@
   hosts: vmware
   tasks:
     - name: new task
-      shell: touch /home/devops/btest.txt
+      shell: touch /home/devops/btest2.txt
     - name: create a directory
-      shell: mkdir /home/devops/newdirectory1
+      shell: mkdir /home/devops/newdirectory2
